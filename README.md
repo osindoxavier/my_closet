@@ -32,7 +32,8 @@ Junit4
 
 
 Design Workflow
-Screenshot
+
+<img width="626" alt="Screenshot 2023-11-30 033937" src="https://github.com/captainxavier/my_closet/assets/30109625/416dade1-c4ec-4fc6-90b9-7a0844f19b10">
 
 
 The database schemas is as follows
