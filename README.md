@@ -198,6 +198,11 @@ In my Android Studio project structure, I've organized it into seven main packag
 6. **Domain**: Positioned between the UI and data layers, this package has two sub-packages. The model sub-package houses all required model classes, while the repository package contains interfaces encapsulating business logic. Actual implementations of these methods are added later to the repository implementation classes.
 
 7. **Data**: The final package includes a repository sub-package, housing classes implementing corresponding interfaces. This involves providing implementations for each method existing in those interfaces.
+8. 
+
+
+UI/UX Design used 
+link - https://www.behance.net/gallery/180396433/Mobile-Shoes-Shopping-App
 
 
 
