@@ -203,7 +203,10 @@ In my Android Studio project structure, I've organized it into seven main packag
 
 UI/UX Design used 
 link - https://www.behance.net/gallery/180396433/Mobile-Shoes-Shopping-App
+<<<<<<< HEAD
 font - https://fonts.google.com/specimen/Caladea?query=cala
+=======
+>>>>>>> fefe66ef4c76764f307980861dae7511020eb9d6
 
 
 
