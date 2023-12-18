@@ -92,13 +92,11 @@ db-root
         |
         --- $productId (document)
             |
-            --- brand: "$brandUid"
-            |
-            --- creationDate: October 4, 2022 at 2:51:18 PM UTC+3
+            --- brandId: "$brandUid"
             |
             --- favorites: ["uid", "uid"]
             |
-            --- id: "productId"
+            --- productId: "productId"
             |
             --- image: "token"
             |
@@ -108,7 +106,7 @@ db-root
             |
             --- price: 9999
             |
-            --- thumb: "token"
+            --- thumb: ["token"]
 
 
 storage-root/images/$productId.png
