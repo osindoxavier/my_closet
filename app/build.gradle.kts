@@ -15,12 +15,13 @@ android {
 
     defaultConfig {
         applicationId = "com.closet.xavier"
-        minSdk = 24
+        minSdk = 26
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
         vectorDrawables {
             useSupportLibrary = true
         }
@@ -76,6 +77,16 @@ dependencies {
     implementation("androidx.compose.ui:ui-graphics")
     implementation("androidx.compose.ui:ui-tooling-preview")
     implementation("androidx.compose.material3:material3")
+    //icons
+    implementation ("androidx.compose.material:material-icons-extended:1.5.4")
+    //lifecycle runtime
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.2")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.2")
+    implementation("androidx.lifecycle:lifecycle-runtime-compose:2.6.2")
+    //
+    implementation("androidx.compose.runtime:runtime-livedata:1.5.4")
+    //navigation
+    implementation("androidx.navigation:navigation-compose:2.7.5")
     //Firebase BoM
     implementation(platform("com.google.firebase:firebase-bom:32.6.0"))
     // TODO: Add the dependencies for Firebase products you want to use
@@ -88,26 +99,28 @@ dependencies {
     //Firebase Storage
     implementation("com.google.firebase:firebase-storage")
     //google services
-    implementation ("com.google.android.gms:play-services-auth:20.7.0")
+    implementation("com.google.android.gms:play-services-auth:20.7.0")
     //google fonts
-    implementation("androidx.compose.ui:ui-text-google-fonts:1.3.2")
+    implementation("androidx.compose.ui:ui-text-google-fonts:1.5.4")
     //coroutines
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
+    //coin
+    implementation("io.coil-kt:coil-compose:2.5.0")
     //Dagger Hilt
     implementation("com.google.dagger:hilt-android:2.48")
-    testImplementation("org.junit.jupiter:junit-jupiter:5.8.1")
-    androidTestImplementation("org.junit.jupiter:junit-jupiter:5.8.1")
-    androidTestImplementation("org.junit.jupiter:junit-jupiter:5.8.1")
     ksp("com.google.dagger:hilt-android-compiler:2.47")
+    implementation("androidx.hilt:hilt-navigation-compose:1.1.0")
     //lifecycle
-    implementation ("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.2")
-    implementation ("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.2")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.2")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.2")
     //coil
     implementation("io.coil-kt:coil-compose:2.5.0")
     // paging
     implementation("androidx.paging:paging-compose:3.2.1")
+    //data store
+    implementation("androidx.datastore:datastore-preferences:1.0.0")
     //test
-    implementation ("androidx.test.ext:junit-ktx:1.1.5")
+    implementation("androidx.test.ext:junit-ktx:1.1.5")
     testImplementation("com.squareup.okhttp3:mockwebserver:4.11.0")
     androidTestImplementation(platform("androidx.compose:compose-bom:2023.03.00"))
     androidTestImplementation("androidx.compose.ui:ui-test-junit4")
@@ -116,27 +129,28 @@ dependencies {
     //Local Unit Test
     testImplementation("androidx.test:core:1.5.0")
     testImplementation("junit:junit:4.13.2")
-    testImplementation ("androidx.arch.core:core-testing:2.2.0")
-    testImplementation ("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3")
-    testImplementation ("com.google.truth:truth:1.1.3")
-    debugImplementation ("androidx.compose.ui:ui-test-manifest")
+    testImplementation("androidx.arch.core:core-testing:2.2.0")
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3")
+    testImplementation("com.google.truth:truth:1.1.3")
+    debugImplementation("androidx.compose.ui:ui-test-manifest")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
     // Instrumentation tests
-    androidTestImplementation ("com.google.dagger:hilt-android-testing:2.47")
-    kspAndroidTest ("com.google.dagger:hilt-android-compiler:2.47")
-    androidTestImplementation ("junit:junit:4.13.2")
-    androidTestImplementation ("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3")
-    androidTestImplementation ("androidx.arch.core:core-testing:2.2.0")
-    androidTestImplementation ("com.google.truth:truth:1.1.3")
-    androidTestImplementation ("androidx.test.ext:junit:1.1.5")
-    androidTestImplementation ("androidx.test:core-ktx:1.5.0")
-    androidTestImplementation ("io.mockk:mockk-android:1.13.8")
-    androidTestImplementation ("androidx.test:runner:1.5.2")
+    androidTestImplementation("com.google.dagger:hilt-android-testing:2.47")
+    kspAndroidTest("com.google.dagger:hilt-android-compiler:2.47")
+    androidTestImplementation("junit:junit:4.13.2")
+    androidTestImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3")
+    androidTestImplementation("androidx.arch.core:core-testing:2.2.0")
+    androidTestImplementation("com.google.truth:truth:1.1.3")
+    androidTestImplementation("androidx.test.ext:junit:1.1.5")
+    androidTestImplementation("androidx.test:core-ktx:1.5.0")
+    androidTestImplementation("io.mockk:mockk-android:1.13.8")
+    androidTestImplementation("androidx.test:runner:1.5.2")
     //mock
 //    testImplementation ("org.mockito:mockito-kotlin:3.6.0")
-    testImplementation ("org.mockito:mockito-core:4.10.0")
-    testImplementation ("org.mockito:mockito-inline:2.8.47")
+    testImplementation("org.mockito:mockito-core:4.10.0")
+    testImplementation("org.mockito:mockito-inline:2.8.47")
+    implementation(kotlin("reflect"))
 
 
 }

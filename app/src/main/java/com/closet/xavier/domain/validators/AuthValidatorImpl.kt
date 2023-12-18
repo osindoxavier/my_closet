@@ -1,12 +1,20 @@
 package com.closet.xavier.domain.validators
 
 import android.util.Patterns
-import com.closet.xavier.data.firebase.domain.base.ValidationResult
+import com.closet.xavier.data.firebase.model.base.ValidationResult
 import com.closet.xavier.utils.Constants
 
 class AuthValidatorImpl:AuthValidators {
     override fun executePhone(phone: String): ValidationResult {
-        TODO("Not yet implemented")
+        if (phone.isBlank()) {
+            return ValidationResult(
+                successful = false,
+                errorMessage = "Phone Number cannot be empty!"
+            )
+        }
+        return ValidationResult(
+            successful = true
+        )
     }
 
     override fun executePassword(password: String): ValidationResult {
@@ -24,21 +32,6 @@ class AuthValidatorImpl:AuthValidators {
             return ValidationResult(
                 successful = false,
                 errorMessage = "Invalid Password!"
-            )
-        }
-        return ValidationResult(
-            successful = true
-        )
-    }
-
-    override fun executeConfirmPassword(
-        password: String,
-        repeatedPassword: String
-    ): ValidationResult {
-        if (password != repeatedPassword) {
-            return ValidationResult(
-                successful = false,
-                errorMessage = "The passwords don't match"
             )
         }
         return ValidationResult(

@@ -1,29 +1,34 @@
 package com.closet.xavier
 
+
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.activity.viewModels
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import com.closet.xavier.components.scaffold.BaseScaffold
-import com.closet.xavier.presentation.authentication.screen.SignInScreen
-import com.closet.xavier.presentation.authentication.view_model.AuthenticationViewModel
-import com.closet.xavier.presentation.theme.MyClosetTheme
+import androidx.navigation.compose.rememberNavController
+import com.closet.xavier.domain.use_cases.internet.ConnectivityManager
+import com.closet.xavier.ui.navigation.graphs.RootNavGraph
+import com.closet.xavier.ui.presentation.theme.MyClosetTheme
+import com.google.firebase.Firebase
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.auth
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
-    private val viewModel by viewModels<AuthenticationViewModel>()
+    @Inject
+    lateinit var connectivityManager: ConnectivityManager
+
     override fun onCreate(savedInstanceState: Bundle?) {
         enableEdgeToEdge(
             statusBarStyle = SystemBarStyle.light(
@@ -38,27 +43,20 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    BaseScaffold {
-                        SignInScreen(viewModel = viewModel, modifier = Modifier.padding(it))
-                    }
+                    val navController = rememberNavController()
+                    RootNavGraph(navController = navController)
                 }
             }
         }
     }
-}
 
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
+    override fun onStart() {
+        super.onStart()
+        connectivityManager.registerConnectionObserver(this)
+    }
 
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    MyClosetTheme {
-        Greeting("Android")
+    override fun onDestroy() {
+        super.onDestroy()
+        connectivityManager.unregisterConnectionObserver(this)
     }
 }
