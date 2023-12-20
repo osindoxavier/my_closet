@@ -21,26 +21,26 @@ fun NavGraphBuilder.bottomNavGraph(navController: NavController) {
         route = RootNavItem.BottomNavigation.id.toString()
     ) {
         composable(route = BottomNavItem.Home.route) {
-            val viewModel: HomeViewModel = hiltViewModel()
-            val userProfileState = viewModel.userProfileState.collectAsStateWithLifecycle()
-            val brandsState = viewModel.brandsState.collectAsStateWithLifecycle()
-            val popularProductState = viewModel.popularProductsState.collectAsStateWithLifecycle()
-
-            val onFavClicked = { product: Product ->
-                viewModel.addFavoriteProduct(productId = product.productId)
-            }
-
-            val onProductClicked = { product: Product ->
-                navController.navigate(BottomNavItem.ProductDetails.route + "/${product.productId}")
-            }
+//            val viewModel: HomeViewModel = hiltViewModel()
+//            val userProfileState = viewModel.userProfileState.collectAsStateWithLifecycle()
+//            val brandsState = viewModel.brandsState.collectAsStateWithLifecycle()
+//            val popularProductState = viewModel.popularProductsState.collectAsStateWithLifecycle()
+//
+//            val onFavClicked = { product: Product ->
+//                viewModel.addFavoriteProduct(productId = product.productId)
+//            }
+//
+//            val onProductClicked = { product: Product ->
+//                navController.navigate(BottomNavItem.ProductDetails.route + "/${product.productId}")
+//            }
 
             HomeScreen(
                 navController = navController,
-                userProfileState = userProfileState,
-                brandsState = brandsState,
-                popularProductState = popularProductState,
-                onFavClicked = onFavClicked,
-                onProductClicked = onProductClicked,
+//                userProfileState = userProfileState,
+//                brandsState = brandsState,
+//                popularProductState = popularProductState,
+//                onFavClicked = onFavClicked,
+//                onProductClicked = onProductClicked,
             )
         }
 

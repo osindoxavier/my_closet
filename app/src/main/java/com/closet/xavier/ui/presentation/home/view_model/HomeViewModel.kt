@@ -63,13 +63,13 @@ class HomeViewModel @Inject constructor(
 
     private fun getAuthState() {
         viewModelScope.launch {
-            getAuthStateUseCase(viewScope = viewModelScope).collect { user ->
-                if (user != null) {
-                    Log.d(TAG, "getAuthState: $user")
-                    currentUserId.value = user.uid
-                    getUserProfile(userId = user.uid)
-                }
-            }
+//            getAuthStateUseCase(viewScope = viewModelScope).collect { user ->
+//                if (user != null) {
+//                    Log.d(TAG, "getAuthState: $user")
+//                    currentUserId.value = user.uid
+//                    getUserProfile(userId = user.uid)
+//                }
+//            }
         }
     }
 

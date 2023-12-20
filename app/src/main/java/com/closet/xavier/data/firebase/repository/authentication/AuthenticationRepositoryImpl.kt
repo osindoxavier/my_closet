@@ -10,6 +10,7 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.stateIn
@@ -19,49 +20,32 @@ class AuthenticationRepositoryImpl @Inject constructor(
     private val firebaseAuth: FirebaseAuth, private val firestore: FirebaseFirestore
 ) : AuthenticationRepository {
 
-    //    override val currentUser: FirebaseUser?
-//        get() {
-//            return firebaseAuth.currentUser
-//        }
-//
-//    override suspend fun signIn(request: AuthenticationRequest): AuthResult {
-//        return firebaseAuth.signInWithEmailAndPassword(request.email, request.password).await()
-//    }
-//
-//    override suspend fun signUp(email: String, password: String): AuthResult {
-//        return firebaseAuth.createUserWithEmailAndPassword(email, password).await()
-//    }
-//
-//    override suspend fun googleSignIn(credential: AuthCredential): AuthResult {
-//        return firebaseAuth.signInWithCredential(credential).await()
-//    }
-//
-//    override suspend fun reloadFirebaseUser(): Resource<Boolean> {
-//        return try {
-//            firebaseAuth.currentUser?.reload()?.await()
-//            Resource.Success(true)
-//        } catch (e: Exception) {
-//            Resource.Error(e.localizedMessage)
-//        }
-//    }
-//
-//    override fun signOut() {
-//        firebaseAuth.signOut()
-//    }
-//
-
 
     override val currentUser: FirebaseUser? get() = firebaseAuth.currentUser
-
-    override fun getAuthState(viewScope: CoroutineScope) = callbackFlow {
-        val authStateListener = FirebaseAuth.AuthStateListener { auth ->
-            trySend(auth.currentUser)
+    override suspend fun startAuthStateListener(): Flow<Boolean> = callbackFlow {
+        val authStateListener = FirebaseAuth.AuthStateListener { firebaseAuth ->
+            trySend(firebaseAuth.currentUser != null).isSuccess
         }
         firebaseAuth.addAuthStateListener(authStateListener)
+
         awaitClose {
             firebaseAuth.removeAuthStateListener(authStateListener)
         }
-    }.stateIn(viewScope, SharingStarted.WhileSubscribed(), firebaseAuth.currentUser)
+    }
+
+    override fun stopAuthStateListener() {
+        TODO("Not yet implemented")
+    }
+
+//    override fun getAuthState(viewScope: CoroutineScope) = callbackFlow {
+//        val authStateListener = FirebaseAuth.AuthStateListener { auth ->
+//            trySend(auth.currentUser)
+//        }
+//        firebaseAuth.addAuthStateListener(authStateListener)
+//        awaitClose {
+//            firebaseAuth.removeAuthStateListener(authStateListener)
+//        }
+//    }.stateIn(viewScope, SharingStarted.WhileSubscribed(), firebaseAuth.currentUser)
 
     override suspend fun signIn(email: String, password: String): Resource<FirebaseUser> {
         return try {

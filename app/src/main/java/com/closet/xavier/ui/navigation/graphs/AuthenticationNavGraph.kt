@@ -1,11 +1,8 @@
 package com.closet.xavier.ui.navigation.graphs
 
 import android.util.Log
-import android.widget.Toast
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -17,12 +14,12 @@ import com.closet.xavier.domain.use_cases.internet.ConnectionLiveDataUseCase
 import com.closet.xavier.ui.navigation.models.AuthenticationNavItem
 import com.closet.xavier.ui.navigation.models.BottomNavItem
 import com.closet.xavier.ui.navigation.models.RootNavItem
-import com.closet.xavier.ui.presentation.authentication.screen.OnBoardingScreen
+import com.closet.xavier.ui.presentation.authentication.onboarding.screen.OnBoardingScreen
 import com.closet.xavier.ui.presentation.authentication.screen.SignInScreen
 import com.closet.xavier.ui.presentation.authentication.screen.SignUpScreen
 import com.closet.xavier.ui.presentation.authentication.view_model.AuthStateViewModel
 import com.closet.xavier.ui.presentation.authentication.view_model.SignInViewModel
-import com.closet.xavier.ui.presentation.authentication.view_model.OnBoardingViewModel
+import com.closet.xavier.ui.presentation.authentication.onboarding.view_model.OnBoardingViewModel
 import com.closet.xavier.ui.presentation.authentication.view_model.SignUpViewModel
 
 fun NavGraphBuilder.authenticationGraph(navController: NavController) {
@@ -34,61 +31,24 @@ fun NavGraphBuilder.authenticationGraph(navController: NavController) {
         composable(route = AuthenticationNavItem.OnboardingScreen.route) {
             val TAG = "OnBoardingScreen"
             val viewModel: OnBoardingViewModel = hiltViewModel()
-            val authStateViewModel: AuthStateViewModel = hiltViewModel()
-            val onSignInNavigation = {
-                navController.navigate(route = AuthenticationNavItem.SignInScreen.route)
-            }
+            val userProfileState =
+                viewModel.checkUserProfileState.collectAsStateWithLifecycle().value
+            val currentUserState = viewModel.currentUserState.collectAsStateWithLifecycle().value
+            val loggedInState = viewModel.loggedInState.collectAsStateWithLifecycle()
+            val newUserState = viewModel.newUserState.collectAsStateWithLifecycle()
 
-            val onSaveNewUserStatus = {
-                viewModel.saveFirstTimeStatus()
-            }
-            val state = viewModel.stateIsFirstTimeUser.collectAsStateWithLifecycle()
-            val currentUser = authStateViewModel.getAuthState().collectAsStateWithLifecycle().value
 
-            val onSignUpNavigation = {
-                navController.navigate(AuthenticationNavItem.SignUpScreen.route)
-            }
-
-            val onHomeNavigation = {
+            val navigateToHomeScreen = {
                 navController.navigate(BottomNavItem.Home.route)
             }
 
-            val context = LocalContext.current
-
-            val isLoading = remember {
-                mutableStateOf(false)
-            }
-
-
-            LaunchedEffect(key1 = authStateViewModel.checkUserProfileState, block = {
-                authStateViewModel.checkUserProfileState.collect { result ->
-                    isLoading.value = result.isLoading
-                    if (result.errorMessage.isNotEmpty()) {
-                        Log.e(TAG, "OnBoardingScreen: ${result.errorMessage}")
-                    }
-                    if (result.isPresent) {
-                        Log.d(TAG, "OnBoardingScreen: User Profile Present= ${result.isPresent}")
-                        onHomeNavigation()
-                    } else {
-                        Log.e(TAG, "OnBoardingScreen: User Profile is not present!Create one!")
-                        Toast.makeText(
-                            context,
-                            "User Profile is not available. Create User Profile!",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                        onSignUpNavigation()
-                    }
-                }
-            })
 
             OnBoardingScreen(
-                onSignInNavigation = onSignInNavigation,
-                saveNewUserStatus = onSaveNewUserStatus,
-                state = state,
-                currentUser = currentUser,
-                onSignUpNavigation = onSignUpNavigation,
-                authStateViewModel = authStateViewModel,
-                isLoading = isLoading
+                userProfileState = userProfileState,
+                currentUserState = currentUserState,
+                loggedInState = loggedInState,
+                newUserState = newUserState,
+                navigateToHomeScreen=navigateToHomeScreen
             )
         }
 
@@ -136,13 +96,13 @@ fun NavGraphBuilder.authenticationGraph(navController: NavController) {
             }
             //auth listener
             val authStateViewModel: AuthStateViewModel = hiltViewModel()
-            val currentUser = authStateViewModel.getAuthState().collectAsStateWithLifecycle().value
+//            val currentUser = authStateViewModel.getAuthState().collectAsStateWithLifecycle().value
             SignUpScreen(
                 context = context,
                 networkState = networkState,
                 viewModel = viewModel,
                 onSignInClicked = onSignInClicked,
-                currentUser = currentUser
+//                currentUser = currentUser
             )
         }
     }

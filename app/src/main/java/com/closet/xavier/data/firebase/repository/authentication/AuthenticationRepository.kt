@@ -5,13 +5,15 @@ import com.closet.xavier.data.firebase.model.base.Resource
 import com.google.firebase.auth.AuthCredential
 import com.google.firebase.auth.FirebaseUser
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
 
 interface AuthenticationRepository {
 
     val currentUser: FirebaseUser?
 
-    fun getAuthState(viewScope: CoroutineScope): StateFlow<FirebaseUser?>
+    suspend fun startAuthStateListener(): Flow<Boolean>
+    fun stopAuthStateListener()
     suspend fun signIn(email: String, password: String): Resource<FirebaseUser>
 
 

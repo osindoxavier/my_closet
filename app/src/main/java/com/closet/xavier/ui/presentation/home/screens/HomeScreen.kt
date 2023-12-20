@@ -63,22 +63,22 @@ import java.util.Locale
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
-    userProfileState: State<UserProfile>,
-    brandsState: State<List<Brand>>,
-    popularProductState: State<List<Product>>,
-    onFavClicked: (Product) -> Unit,
-    onProductClicked: (Product) -> Unit,
+//    userProfileState: State<UserProfile>,
+//    brandsState: State<List<Brand>>,
+//    popularProductState: State<List<Product>>,
+//    onFavClicked: (Product) -> Unit,
+//    onProductClicked: (Product) -> Unit,
     navController: NavController
 ) {
     BaseScaffold(
         content = {
             HomeScreenContent(
                 modifier = Modifier.padding(it),
-                userProfile = userProfileState.value,
-                brands = brandsState.value,
-                popularProducts = popularProductState.value,
-                onFavClicked = onFavClicked,
-                onProductClicked = onProductClicked
+//                userProfile = userProfileState.value,
+//                brands = brandsState.value,
+//                popularProducts = popularProductState.value,
+//                onFavClicked = onFavClicked,
+//                onProductClicked = onProductClicked
             )
         },
         bottomBar = {
@@ -90,11 +90,11 @@ fun HomeScreen(
 @Composable
 fun HomeScreenContent(
     modifier: Modifier = Modifier,
-    userProfile: UserProfile,
-    brands: List<Brand>?,
-    popularProducts: List<Product>,
-    onFavClicked: (Product) -> Unit,
-    onProductClicked: (Product) -> Unit
+//    userProfile: UserProfile,
+//    brands: List<Brand>?,
+//    popularProducts: List<Product>,
+//    onFavClicked: (Product) -> Unit,
+//    onProductClicked: (Product) -> Unit
 ) {
     val verticalSpace = 18.dp
     val horizontalSpace = 16.dp
@@ -103,8 +103,8 @@ fun HomeScreenContent(
         mutableStateOf("")
     }
 
-    username.value = userProfile.firstName.lowercase()
-        .replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }
+//    username.value = userProfile.firstName.lowercase()
+//        .replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }
 
     Column(
         modifier = modifier
@@ -113,30 +113,23 @@ fun HomeScreenContent(
             .padding(vertical = verticalSpace, horizontal = horizontalSpace)
             .verticalScroll(rememberScrollState())
     ) {
-        HomeSalutationSection(username.value, itemCount = 10)
-        SearchBar()
-        CategorySection(brands = brands)
-        BannerSection()
-        PopularShoesSection(
-            popularProducts = popularProducts,
-            onFavClicked = onFavClicked,
-            onProductClicked = onProductClicked,
-            userId = userProfile.uid
-        )
-        RecentProductSection()
+        HomeSalutationSection("username.value", itemCount = 10)
+
+//        CategorySection(brands = brands)
+//        BannerSection()
+//        PopularShoesSection(
+//            popularProducts = popularProducts,
+//            onFavClicked = onFavClicked,
+//            onProductClicked = onProductClicked,
+//            userId = userProfile.uid
+//        )
+//        RecentProductSection()
     }
 }
 
 
 
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun SearchBar(
-    modifier: Modifier = Modifier
-) {
 
-
-}
 
 
 @Composable

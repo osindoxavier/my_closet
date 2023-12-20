@@ -51,16 +51,16 @@ class SignUpViewModel @Inject constructor(
     private val currentUserUid = mutableStateOf("")
 
 
-    init {
-        getAuthState()
-    }
-
-
-    private fun getAuthState() {
-        currentUserUid.value = getAuthStateUseCase(viewScope = viewModelScope).value?.uid.apply {
-            Log.d(TAG, "getAuthState: $this")
-        } ?: ""
-    }
+//    init {
+//        getAuthState()
+//    }
+//
+//
+//    private fun getAuthState() {
+//        currentUserUid.value = getAuthStateUseCase(viewScope = viewModelScope).value?.uid.apply {
+//            Log.d(TAG, "getAuthState: $this")
+//        } ?: ""
+//    }
 
 
     fun onSignUp(event: SignUpFormEvent) {

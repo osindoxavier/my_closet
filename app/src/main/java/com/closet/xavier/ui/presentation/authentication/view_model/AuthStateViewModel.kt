@@ -26,11 +26,11 @@ class AuthStateViewModel @Inject constructor(
     private val _checkUserProfileState = MutableSharedFlow<CheckUserProfileState>()
     val checkUserProfileState = _checkUserProfileState.asSharedFlow()
 
-    init {
-        getAuthState()
-    }
+//    init {
+//        getAuthState()
+//    }
 
-    fun getAuthState() = checkAuthStateUseCase(viewScope = viewModelScope)
+//    fun getAuthState() = checkAuthStateUseCase(viewScope = viewModelScope)
 
     fun checkUserProfile(userId: String) {
         checkUserProfileUseCase(userId = userId).onEach { result ->

@@ -70,7 +70,7 @@ fun SignUpScreen(
     networkState: State<Boolean>,
     viewModel: SignUpViewModel,
     onSignInClicked: () -> Unit,
-    currentUser: FirebaseUser?
+//    currentUser: FirebaseUser?
 ) {
 
     val TAG = "SignUpScreen"
@@ -121,7 +121,7 @@ fun SignUpScreen(
                     viewModel = viewModel,
                     context = context,
                     onSignInClicked = onSignInClicked,
-                    currentUser = currentUser
+//                    currentUser = currentUser
                 )
                 if (!isNetworkAvailable) {
                     Box(
@@ -145,7 +145,7 @@ fun SignUpScreenContent(
     viewModel: SignUpViewModel,
     context: Context,
     onSignInClicked: () -> Unit,
-    currentUser: FirebaseUser?
+//    currentUser: FirebaseUser?
 ) {
 
 
@@ -160,19 +160,19 @@ fun SignUpScreenContent(
             .verticalScroll(rememberScrollState())
     ) {
 
-        val title = if (currentUser==null) "Sign Up" else "Create User Profile"
-        val subTitle = if (currentUser==null) "Welcome, Please Sign Up to create\n" + "Your profile" else "Welcome, Please create\n" + "Your profile"
+//        val title = if (currentUser==null) "Sign Up" else "Create User Profile"
+//        val subTitle = if (currentUser==null) "Welcome, Please Sign Up to create\n" + "Your profile" else "Welcome, Please create\n" + "Your profile"
 
-        AuthenticationHeadlineSection(
-            title = title, subTitle = subTitle
-        )
-        SignUpFormSection(viewModel = viewModel, currentUser = currentUser)
-        SignUpButtonSection(onSignUp = {
-            viewModel.onSignUp(SignUpFormEvent.Submit)
-        }, onGoogleSignUp = {}, currentUser = currentUser)
-        if (currentUser == null) {
-            SignInButtonSection(onclick = onSignInClicked, modifier = Modifier.fillMaxWidth())
-        }
+//        AuthenticationHeadlineSection(
+//            title = title, subTitle = subTitle
+//        )
+//        SignUpFormSection(viewModel = viewModel, currentUser = currentUser)
+//        SignUpButtonSection(onSignUp = {
+//            viewModel.onSignUp(SignUpFormEvent.Submit)
+//        }, onGoogleSignUp = {}, currentUser = currentUser)
+//        if (currentUser == null) {
+//            SignInButtonSection(onclick = onSignInClicked, modifier = Modifier.fillMaxWidth())
+//        }
     }
 }
 
