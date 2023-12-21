@@ -11,6 +11,7 @@ object Constants {
     const val USER_PREFERENCES = "user_preferences"
     val IS_FIRST_TIME_USER = booleanPreferencesKey("first_timer")
     val LOGGED_IN_USER_UID = stringPreferencesKey("user_uid")
+    val IS_DARK_MODE = booleanPreferencesKey("isDarkMode")
 
     const val FIREBASE_USER_COLLECTION = "users"
     const val BRANDS_COLLECTION = "brands"

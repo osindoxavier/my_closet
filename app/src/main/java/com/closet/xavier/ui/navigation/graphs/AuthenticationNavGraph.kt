@@ -42,13 +42,25 @@ fun NavGraphBuilder.authenticationGraph(navController: NavController) {
                 navController.navigate(BottomNavItem.Home.route)
             }
 
+            val navigateToSignInScreen = {
+                navController.navigate(AuthenticationNavItem.SignInScreen.route)
+            }
+
+            val navigateToSignUpScreen = {
+                navController.navigate(AuthenticationNavItem.SignUpScreen.route)
+            }
+
+
+
 
             OnBoardingScreen(
                 userProfileState = userProfileState,
                 currentUserState = currentUserState,
                 loggedInState = loggedInState,
                 newUserState = newUserState,
-                navigateToHomeScreen=navigateToHomeScreen
+                navigateToHomeScreen = navigateToHomeScreen,
+                navigateToSignInScreen = navigateToSignInScreen,
+                navigateToSignUpScreen=navigateToSignUpScreen
             )
         }
 

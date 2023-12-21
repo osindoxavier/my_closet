@@ -7,7 +7,6 @@ import com.google.firebase.firestore.DocumentSnapshot
 interface ProductRepository {
     suspend fun getProducts():Resource<List<Product>>
     suspend fun getProductById(productId:String):Resource<Product?>
-    suspend fun addProductToFavourite(productId:String,userId:String):Resource<Boolean>
-
+    suspend fun toggleProductFavorite(productId: String, userId: String)
     suspend fun searchCollectionsByName(name: String): List<DocumentSnapshot>
 }

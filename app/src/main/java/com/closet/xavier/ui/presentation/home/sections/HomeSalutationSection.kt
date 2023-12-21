@@ -15,6 +15,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.closet.xavier.ui.components.cart.CartIconBox
 import com.closet.xavier.ui.components.text.BaseText
+import com.closet.xavier.utils.getDaySalutation
 
 @Composable
 fun HomeSalutationSection(username: String, modifier: Modifier = Modifier, itemCount: Int = 0) {
@@ -23,9 +24,10 @@ fun HomeSalutationSection(username: String, modifier: Modifier = Modifier, itemC
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
+
         Column {
             BaseText(
-                text = "Good Morning, $username",
+                text = "${getDaySalutation()}, $username \uD83D\uDE0A",
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.onPrimary

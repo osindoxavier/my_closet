@@ -4,15 +4,16 @@ import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.closet.xavier.data.firebase.model.authentication.UserProfile
 import com.closet.xavier.data.firebase.model.base.Resource
-import com.closet.xavier.data.firebase.model.brand.Brand
-import com.closet.xavier.data.firebase.model.product.Product
 import com.closet.xavier.domain.use_cases.authentication.CheckAuthStateUseCase
+import com.closet.xavier.domain.use_cases.authentication.GetCurrentUserUseCase
 import com.closet.xavier.domain.use_cases.brands.GetBrandsUseCase
 import com.closet.xavier.domain.use_cases.products.AddProductToFavouriteUseCase
 import com.closet.xavier.domain.use_cases.products.GetProductsUseCase
 import com.closet.xavier.domain.use_cases.user_profile.GetUserProfileUseCase
+import com.closet.xavier.ui.presentation.home.states.BrandsState
+import com.closet.xavier.ui.presentation.home.states.ProductsState
+import com.closet.xavier.ui.presentation.home.states.UserProfileState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -24,10 +25,11 @@ import javax.inject.Inject
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val getUserProfileUseCase: GetUserProfileUseCase,
-    private val getAuthStateUseCase: CheckAuthStateUseCase,
+    private val checkAuthStateUseCase: CheckAuthStateUseCase,
     private val getBrandsUseCase: GetBrandsUseCase,
     private val getPopularProductsUseCase: GetProductsUseCase,
-    private val addProductToFavouriteUseCase: AddProductToFavouriteUseCase
+    private val addProductToFavouriteUseCase: AddProductToFavouriteUseCase,
+    private val getCurrentUserUseCase: GetCurrentUserUseCase
 ) :
     ViewModel() {
     companion object {
@@ -36,19 +38,17 @@ class HomeViewModel @Inject constructor(
 
     private val currentUserId = mutableStateOf("")
 
-    private val _loadingState = MutableStateFlow(false)
-    val loadingState = _loadingState.asStateFlow()
+    private val _loggedInState = MutableStateFlow(false)
+    val loggedInState = _loggedInState.asStateFlow()
 
-    private val _errorState = MutableStateFlow("")
-    val errorState = _errorState.asStateFlow()
 
-    private val _userProfileState = MutableStateFlow(UserProfile())
+    private val _userProfileState = MutableStateFlow<UserProfileState>(UserProfileState.Loading)
     val userProfileState = _userProfileState.asStateFlow()
 
-    private val _brandsState = MutableStateFlow(emptyList<Brand>())
-    val brandsState = _brandsState.asStateFlow()
+    private val _brandState = MutableStateFlow<BrandsState>(BrandsState.Loading)
+    val brandsState = _brandState.asStateFlow()
 
-    private val _popularProductsState = MutableStateFlow(emptyList<Product>())
+    private val _popularProductsState = MutableStateFlow<ProductsState>(ProductsState.Loading)
     val popularProductsState = _popularProductsState.asStateFlow()
 
     private val _addProductToFavouriteState = MutableStateFlow(false)
@@ -63,13 +63,27 @@ class HomeViewModel @Inject constructor(
 
     private fun getAuthState() {
         viewModelScope.launch {
-//            getAuthStateUseCase(viewScope = viewModelScope).collect { user ->
-//                if (user != null) {
-//                    Log.d(TAG, "getAuthState: $user")
-//                    currentUserId.value = user.uid
-//                    getUserProfile(userId = user.uid)
-//                }
-//            }
+            checkAuthStateUseCase().collect { loginState ->
+                if (loginState) {
+                    Log.d(TAG, "getAuthState: Logged In::$loginState")
+                    _loggedInState.value = loginState
+                    getCurrentUser()
+                } else {
+                    Log.d(TAG, "getAuthState: Logged In::$loginState")
+                    _loggedInState.value = loginState
+                }
+            }
+        }
+    }
+
+
+    private fun getCurrentUser() {
+        viewModelScope.launch {
+            val response = getCurrentUserUseCase()
+            if (response != null) {
+                Log.d(TAG, "getCurrentUser: ${response.uid}")
+                getUserProfile(userId = response.uid)
+            }
         }
     }
 
@@ -79,19 +93,20 @@ class HomeViewModel @Inject constructor(
                 is Resource.Error -> {
                     if (result.errorResponse != null) {
                         Log.e(TAG, "getUserProfile: ${result.errorResponse}")
-                        _errorState.value = result.errorResponse
+                        _userProfileState.value =
+                            UserProfileState.Error(errorMessage = result.errorResponse)
                     }
                 }
 
                 is Resource.Loading -> {
                     Log.d(TAG, "getUserProfile: loading")
-                    _loadingState.value = true
+                    _userProfileState.value = UserProfileState.Loading
                 }
 
                 is Resource.Success -> {
                     if (result.data != null) {
                         Log.d(TAG, "getUserProfile: ${result.data}")
-                        _userProfileState.value = result.data
+                        _userProfileState.value = UserProfileState.Success(profile = result.data)
                     }
                 }
             }
@@ -105,19 +120,19 @@ class HomeViewModel @Inject constructor(
                 is Resource.Error -> {
                     if (result.errorResponse != null) {
                         Log.e(TAG, "getBrands: ${result.errorResponse}")
-                        _errorState.value = result.errorResponse
+                        _brandState.value = BrandsState.Error(error = result.errorResponse)
                     }
                 }
 
                 is Resource.Loading -> {
                     Log.d(TAG, "getBrands: loading")
-                    _loadingState.value = true
+                    _brandState.value = BrandsState.Loading
                 }
 
                 is Resource.Success -> {
                     if (result.data != null) {
                         Log.d(TAG, "getBrands: ${result.data}")
-                        _brandsState.value = result.data
+                        _brandState.value = BrandsState.Success(brandList = result.data)
                     }
                 }
             }
@@ -132,18 +147,20 @@ class HomeViewModel @Inject constructor(
                 is Resource.Error -> {
                     if (result.errorResponse != null) {
                         Log.e(TAG, "getPopularProducts: ${result.errorResponse}")
-                        _errorState.value = result.errorResponse
+                        _popularProductsState.value =
+                            ProductsState.Error(error = result.errorResponse)
                     }
                 }
 
                 is Resource.Loading -> {
-                    _loadingState.value = true
+                    _popularProductsState.value = ProductsState.Loading
                 }
 
                 is Resource.Success -> {
                     if (result.data != null) {
                         Log.d(TAG, "getPopularProducts: ${result.data}")
-                        _popularProductsState.value = result.data.filter { it.popular }
+                        _popularProductsState.value =
+                            ProductsState.Success(products = result.data.filter { it.popular })
                     }
                 }
             }
@@ -160,7 +177,7 @@ class HomeViewModel @Inject constructor(
                 is Resource.Error -> {
                     if (result.errorResponse != null) {
                         Log.e(TAG, "addFavoriteProduct: ${result.errorResponse}")
-                        _errorState.value = result.errorResponse
+//                        _errorState.value = result.errorResponse
                     }
                 }
 
