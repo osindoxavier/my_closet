@@ -12,8 +12,8 @@ import com.closet.xavier.data.firebase.repository.authentication.AuthenticationR
 import com.closet.xavier.data.firebase.repository.authentication.AuthenticationRepositoryImpl
 import com.closet.xavier.data.firebase.repository.brand.BrandRepository
 import com.closet.xavier.data.firebase.repository.brand.BrandRepositoryImpl
-import com.closet.xavier.data.firebase.repository.data_store_prefence.DataStorePreferencesRepository
-import com.closet.xavier.data.firebase.repository.data_store_prefence.DataStorePreferencesRepositoryImpl
+import com.closet.xavier.data.data_store_prefence.repository.DataStorePreferencesRepository
+import com.closet.xavier.data.data_store_prefence.repository.DataStorePreferencesRepositoryImpl
 import com.closet.xavier.data.firebase.repository.product.ProductRepository
 import com.closet.xavier.data.firebase.repository.product.ProductRepositoryImpl
 import com.closet.xavier.data.firebase.repository.profile.UserProfileRepository

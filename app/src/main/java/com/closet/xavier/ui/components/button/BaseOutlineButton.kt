@@ -10,7 +10,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.closet.xavier.ui.components.text.BaseText
-import com.closet.xavier.ui.presentation.theme.LightSurface
 
 @Composable
 fun BaseOutlineButton(

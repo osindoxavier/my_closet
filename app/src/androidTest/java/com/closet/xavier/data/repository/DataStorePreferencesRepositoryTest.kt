@@ -3,8 +3,8 @@ package com.closet.xavier.data.repository
 import android.content.Context
 import androidx.test.core.app.ApplicationProvider
 import com.closet.xavier.data.di.DataStoreSingleton
-import com.closet.xavier.data.firebase.repository.data_store_prefence.DataStorePreferencesRepository
-import com.closet.xavier.data.firebase.repository.data_store_prefence.DataStorePreferencesRepositoryImpl
+import com.closet.xavier.data.data_store_prefence.repository.DataStorePreferencesRepository
+import com.closet.xavier.data.data_store_prefence.repository.DataStorePreferencesRepositoryImpl
 import kotlinx.coroutines.flow.Flow
 
 class DataStorePreferencesRepositoryTest : DataStorePreferencesRepository {

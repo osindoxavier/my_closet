@@ -49,32 +49,64 @@ class ProductRepositoryImpl @Inject constructor(private val firestore: FirebaseF
             }
         }
 
-    override suspend fun addProductToFavourite(
-        productId: String,
-        userId: String
-    ): Resource<Boolean> = withContext(
-        Dispatchers.IO
-    ) {
-        return@withContext try {
-            val productSnapshot = collectionRef.document(productId).get().await()
-            if (productSnapshot.exists()) {
-                val favoritesList = productSnapshot.get("favorites") as? MutableList<String>
-                if (favoritesList != null) {
-                    if (favoritesList.contains(userId)) {
-                        favoritesList.remove(userId)
+    override suspend fun toggleProductFavorite(productId: String, userId: String): Unit = withContext(Dispatchers.IO) {
+        val documentSnapshot = collectionRef.document(productId)
+        documentSnapshot.get().addOnSuccessListener { document ->
+            val product = document.toObject(Product::class.java)
+            if (product != null) {
+                val updatedFavorites =
+                    if (product.favorites?.contains(userId) == true) {
+                        // Remove user ID
+                        product.favorites.minus(userId)
                     } else {
-                        favoritesList.add(userId)
+                        // Add user ID
+                        product.favorites.orEmpty().plus(userId)
                     }
-                    // Update the favorites field in the product document
-                    collectionRef.document(productId).update("favorites", favoritesList).await()
-                }
-            }
-            Resource.Success(true)
-        } catch (e: FirebaseException) {
-            Resource.Error(errorResponse = e.localizedMessage)
-        }
 
+                collectionRef.document(productId).update("favorites", updatedFavorites)
+                    .addOnSuccessListener {
+                        // Handle successful update
+                    }.addOnFailureListener { e ->
+                        // Handle error
+                    }
+            } else {
+                // Handle product not found
+            }
+        }.addOnFailureListener { e ->
+            // Handle error
+        }
     }
+
+//    override suspend fun addProductToFavourite(
+//        productId: String,
+//        userId: String
+//    ): Resource<Boolean> = withContext(
+//        Dispatchers.IO
+//    ) {
+//        return@withContext try {
+//            val productSnapshot = collectionRef.document(productId).get().await()
+//            if (productSnapshot.exists()) {
+//                val product = productSnapshot.toObject(Product::class.java)
+//
+//                if (product != null) {
+//                    val updatedFavorites =
+//                        if (product.favorites?.contains(userId) == true) {
+//                            // Remove user ID
+//                            product.favorites.minus(userId)
+//                        } else {
+//                            // Add user ID
+//                            product.favorites.orEmpty().plus(userId)
+//                        }
+//                    // Update the favorites field in the product document
+//                    collectionRef.document(productId).update("favorites", updatedFavorites).await()
+//                }
+//            }
+//            Resource.Success(true)
+//        } catch (e: FirebaseException) {
+//            Resource.Error(errorResponse = e.localizedMessage)
+//        }
+//
+//    }
 
     override suspend fun searchCollectionsByName(name: String): List<DocumentSnapshot> =
         withContext(

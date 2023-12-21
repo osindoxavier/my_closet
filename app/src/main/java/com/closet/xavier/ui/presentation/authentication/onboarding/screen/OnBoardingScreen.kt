@@ -22,7 +22,9 @@ fun OnBoardingScreen(
     loggedInState: State<Boolean>,
     userProfileState: CheckUserProfileState,
     currentUserState: CurrentUserState,
-    navigateToHomeScreen: () -> Unit
+    navigateToHomeScreen: () -> Unit,
+    navigateToSignInScreen: () -> Unit,
+    navigateToSignUpScreen: () -> Unit
 ) {
     val TAG = "OnBoardingScreen"
     val isLoggedIn = loggedInState.value
@@ -36,8 +38,8 @@ fun OnBoardingScreen(
                 //check if new user
                 Log.d(TAG, "OnBoardingScreen: isNewUser::${newUserState.value}")
                 OnBoardingButtonSection(
-                    onSignUpClicked = { },
-                    onSignInClicked = {},
+                    onSignUpClicked = navigateToSignUpScreen,
+                    onSignInClicked = navigateToSignInScreen,
                     modifier = Modifier.align(
                         Alignment.BottomCenter
                     )
@@ -97,14 +99,18 @@ fun OnBoardingScreenLoadingPreview() {
         mutableStateOf(false)
     }
 
-    val navigateToHomeScreen ={}
+    val navigateToHomeScreen = {}
+    val navigateToSignInScreen = {}
+    val navigateToSignUpScreen = {}
 
     OnBoardingScreen(
         newUserState = newUserState,
         loggedInState = loggedInState,
         userProfileState = userProfileState,
         currentUserState = currentUserState,
-        navigateToHomeScreen = navigateToHomeScreen
+        navigateToHomeScreen = navigateToHomeScreen,
+        navigateToSignInScreen = navigateToSignInScreen,
+        navigateToSignUpScreen = navigateToSignUpScreen
     )
 
 }
@@ -121,14 +127,19 @@ fun OnBoardingScreenSuccessPreview() {
         mutableStateOf(true)
     }
 
-    val navigateToHomeScreen ={}
+    val navigateToHomeScreen = {}
+
+    val navigateToSignInScreen = {}
+    val navigateToSignUpScreen = {}
 
     OnBoardingScreen(
         newUserState = newUserState,
         loggedInState = loggedInState,
         userProfileState = userProfileState,
         currentUserState = currentUserState,
-        navigateToHomeScreen = navigateToHomeScreen
+        navigateToHomeScreen = navigateToHomeScreen,
+        navigateToSignInScreen = navigateToSignInScreen,
+        navigateToSignUpScreen = navigateToSignUpScreen
     )
 }
 

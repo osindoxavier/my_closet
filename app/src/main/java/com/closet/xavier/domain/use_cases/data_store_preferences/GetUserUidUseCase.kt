@@ -1,6 +1,6 @@
 package com.closet.xavier.domain.use_cases.data_store_preferences
 
-import com.closet.xavier.data.firebase.repository.data_store_prefence.DataStorePreferencesRepository
+import com.closet.xavier.data.data_store_prefence.repository.DataStorePreferencesRepository
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 

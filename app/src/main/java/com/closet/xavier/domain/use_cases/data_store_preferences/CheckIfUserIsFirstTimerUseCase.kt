@@ -1,13 +1,11 @@
 package com.closet.xavier.domain.use_cases.data_store_preferences
 
 import android.util.Log
-import com.closet.xavier.data.firebase.repository.data_store_prefence.DataStorePreferencesRepository
+import com.closet.xavier.data.data_store_prefence.repository.DataStorePreferencesRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
-import kotlin.math.log
 
 class CheckIfUserIsFirstTimerUseCase @Inject constructor(
     private val repository: DataStorePreferencesRepository
