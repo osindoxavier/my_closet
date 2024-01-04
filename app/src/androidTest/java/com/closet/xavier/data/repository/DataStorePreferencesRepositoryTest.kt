@@ -2,6 +2,7 @@ package com.closet.xavier.data.repository
 
 import android.content.Context
 import androidx.test.core.app.ApplicationProvider
+import com.closet.xavier.data.data_store_prefence.model.DarkTheme
 import com.closet.xavier.data.di.DataStoreSingleton
 import com.closet.xavier.data.data_store_prefence.repository.DataStorePreferencesRepository
 import com.closet.xavier.data.data_store_prefence.repository.DataStorePreferencesRepositoryImpl
@@ -29,5 +30,13 @@ class DataStorePreferencesRepositoryTest : DataStorePreferencesRepository {
 
     override fun getUserUid(): Flow<String> {
         return repository.getUserUid()
+    }
+
+    override fun getThemeMode(): Flow<DarkTheme> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun toggleThemeMode(isDark: Boolean) {
+        TODO("Not yet implemented")
     }
 }

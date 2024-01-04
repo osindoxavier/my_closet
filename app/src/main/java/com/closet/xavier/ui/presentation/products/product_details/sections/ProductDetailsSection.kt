@@ -9,6 +9,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -28,26 +30,35 @@ import com.closet.xavier.data.firebase.model.product.Product
 fun ProductDetailsSection(product: Product) {
     val verticalSpace = 56.dp
     val horizontalSpace = 18.dp
-    Box(
+
+    Card(
         modifier = Modifier
-            .fillMaxSize()
-            .clip(shape = RoundedCornerShape(topEndPercent = 5, topStartPercent = 5))
-            .background(color = MaterialTheme.colorScheme.surface)
-            .padding(horizontal = horizontalSpace)
+            .fillMaxSize(),
+        shape = RoundedCornerShape(topEndPercent = 5, topStartPercent = 5),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surface
+        )
     ) {
-        Column(
+        Box(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(bottom = verticalSpace, top = 16.dp)
-                .verticalScroll(rememberScrollState())
-
+                .padding(horizontal = horizontalSpace),
         ) {
-            ProductNameAndPriceSection(product = product)
-            ProductDescriptionSection()
-            ProductBrandAndStockSection()
-            ProductDetailsSizeSection()
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(bottom = verticalSpace, top = 16.dp)
+                    .verticalScroll(rememberScrollState())
+
+            ) {
+                ProductNameAndPriceSection(product = product)
+                ProductDescriptionSection()
+                ProductBrandAndStockSection()
+                ProductDetailsSizeSection()
+            }
+            ProductDetailActionButtonSection(modifier = Modifier.align(Alignment.BottomCenter))
         }
-        ProductDetailActionButtonSection(modifier = Modifier.align(Alignment.BottomCenter))
+
     }
 }
 
@@ -61,7 +72,7 @@ fun ProductBrandAndStockSection(modifier: Modifier = Modifier) {
         val text = buildAnnotatedString {
             withStyle(
                 SpanStyle(
-                    color = MaterialTheme.colorScheme.onSecondary,
+                    color = MaterialTheme.colorScheme.onPrimary,
                 )
             ) {
                 append("Stock: ")

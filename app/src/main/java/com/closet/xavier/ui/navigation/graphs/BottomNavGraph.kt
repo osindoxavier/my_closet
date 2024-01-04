@@ -45,7 +45,7 @@ fun NavGraphBuilder.bottomNavGraph(
                 viewModel.popularProductsState.collectAsStateWithLifecycle().value
 
             val onFavClicked = { product: Product ->
-                viewModel.addFavoriteProduct(productId = product.productId)
+                viewModel.onFavoriteClick(product = product)
             }
 
             val onProductClicked = { product: Product ->
@@ -64,15 +64,21 @@ fun NavGraphBuilder.bottomNavGraph(
 
         composable(route = BottomNavItem.ProductDetails.route + "/{productId}") {
             val viewModel: ProductDetailsViewModel = hiltViewModel()
-            val productState = viewModel.getProductByIdState.collectAsStateWithLifecycle()
-            val productImagesState = viewModel.productImagesState.collectAsStateWithLifecycle()
+            val productState = viewModel.getProductByIdState.collectAsStateWithLifecycle().value
+            val currentUserState = viewModel.currentUserIdState.collectAsStateWithLifecycle().value
+
             val navigateBack = {
                 navController.popBackStack()
             }
+            val onFavClicked = { product: Product ->
+                viewModel.onFavoriteClick(product = product)
+            }
+
             ProductDetailsScreen(
-                productState = productState,
                 navigateBack = navigateBack,
-                productImagesState = productImagesState
+                productState = productState,
+                currentUserState = currentUserState,
+                onFavClicked = onFavClicked
             )
         }
         composable(route = BottomNavItem.Store.route) {
@@ -82,7 +88,7 @@ fun NavGraphBuilder.bottomNavGraph(
             val productsState = viewModel.productsState.collectAsStateWithLifecycle().value
 
             val onFavClicked = { product: Product ->
-                viewModel.addFavoriteProduct(productId = product.productId)
+                viewModel.onFavoriteClick(product = product)
             }
 
             val onProductClicked = { product: Product ->
@@ -106,7 +112,7 @@ fun NavGraphBuilder.bottomNavGraph(
             val productsState = viewModel.productsState.collectAsStateWithLifecycle().value
 
             val onFavClicked = { product: Product ->
-                viewModel.addFavoriteProduct(productId = product.productId)
+                viewModel.onFavoriteClick(product = product)
             }
 
             val onProductClicked = { product: Product ->

@@ -1,15 +1,15 @@
 package com.closet.xavier.ui.presentation.home.view_model
 
 import android.util.Log
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.closet.xavier.data.firebase.model.base.Resource
+import com.closet.xavier.data.firebase.model.product.Product
 import com.closet.xavier.domain.use_cases.authentication.CheckAuthStateUseCase
 import com.closet.xavier.domain.use_cases.authentication.GetCurrentUserUseCase
 import com.closet.xavier.domain.use_cases.brands.GetBrandsUseCase
-import com.closet.xavier.domain.use_cases.products.AddProductToFavouriteUseCase
 import com.closet.xavier.domain.use_cases.products.GetProductsUseCase
+import com.closet.xavier.domain.use_cases.products.ToggleFavoriteUseCase
 import com.closet.xavier.domain.use_cases.user_profile.GetUserProfileUseCase
 import com.closet.xavier.ui.presentation.home.states.BrandsState
 import com.closet.xavier.ui.presentation.home.states.ProductsState
@@ -27,16 +27,16 @@ class HomeViewModel @Inject constructor(
     private val getUserProfileUseCase: GetUserProfileUseCase,
     private val checkAuthStateUseCase: CheckAuthStateUseCase,
     private val getBrandsUseCase: GetBrandsUseCase,
+    private val getCurrentUserUseCase: GetCurrentUserUseCase,
     private val getPopularProductsUseCase: GetProductsUseCase,
-    private val addProductToFavouriteUseCase: AddProductToFavouriteUseCase,
-    private val getCurrentUserUseCase: GetCurrentUserUseCase
+    private val toggleFavoriteUseCase: ToggleFavoriteUseCase,
 ) :
     ViewModel() {
     companion object {
         private const val TAG = "HomeViewModel"
     }
 
-    private val currentUserId = mutableStateOf("")
+    private lateinit var currentUserId: String
 
     private val _loggedInState = MutableStateFlow(false)
     val loggedInState = _loggedInState.asStateFlow()
@@ -82,6 +82,7 @@ class HomeViewModel @Inject constructor(
             val response = getCurrentUserUseCase()
             if (response != null) {
                 Log.d(TAG, "getCurrentUser: ${response.uid}")
+                currentUserId = response.uid
                 getUserProfile(userId = response.uid)
             }
         }
@@ -168,33 +169,32 @@ class HomeViewModel @Inject constructor(
         }.launchIn(viewModelScope)
     }
 
-    fun addFavoriteProduct(productId: String) {
-        addProductToFavouriteUseCase(
-            productId = productId,
-            userId = currentUserId.value
-        ).onEach { result ->
-            when (result) {
-                is Resource.Error -> {
-                    if (result.errorResponse != null) {
-                        Log.e(TAG, "addFavoriteProduct: ${result.errorResponse}")
-//                        _errorState.value = result.errorResponse
+
+    fun onFavoriteClick(product: Product) {
+        viewModelScope.launch {
+            toggleFavoriteUseCase(
+                productId = product.productId,
+                currentUserId = currentUserId
+            ).onEach { result ->
+                when (result) {
+                    is Resource.Error -> {
+                        if (result.errorResponse != null) {
+                            Log.e(TAG, "onFavoriteClick: ${result.errorResponse}")
+                        }
+                    }
+
+                    is Resource.Loading -> {
+                        Log.d(TAG, "addFavoriteProduct: loading")
+                    }
+
+                    is Resource.Success -> {
+                        if (result.data == true) {
+                            Log.d(TAG, "onFavoriteClick: product favourite added or removed")
+                        }
                     }
                 }
 
-                is Resource.Loading -> {
-                    Log.d(TAG, "addFavoriteProduct: loading")
-                }
-
-                is Resource.Success -> {
-                    if (result.data == true) {
-                        Log.d(TAG, "addFavoriteProduct: product added or removed")
-                        _addProductToFavouriteState.value = result.data
-                        getPopularProducts()
-                    }
-                }
-            }
-
-        }.launchIn(viewModelScope)
-
+            }.launchIn(viewModelScope)
+        }
     }
 }
