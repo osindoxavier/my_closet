@@ -11,15 +11,9 @@ import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
@@ -27,6 +21,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
+import com.closet.xavier.data.firebase.model.product.Product
 import com.closet.xavier.ui.components.images.ProductImageBox
 import kotlinx.coroutines.launch
 
@@ -35,7 +30,10 @@ import kotlinx.coroutines.launch
 fun ProductPhotoSection(
     modifier: Modifier = Modifier,
     navigateBack: () -> Boolean,
-    images: List<String>
+    images: List<String>,
+    onFavClicked: (Product) -> Unit,
+    product: Product,
+    currentUserId: String
 ) {
     val pagerState = rememberPagerState(pageCount = {
         images.size
@@ -63,18 +61,6 @@ fun ProductPhotoSection(
                     contentScale = ContentScale.Fit
                 )
             }
-        }
-        IconButton(
-            onClick = { navigateBack() }, modifier = Modifier.align(
-                Alignment.TopStart
-            )
-        ) {
-            Icon(
-                imageVector = Icons.Default.ArrowBack,
-                contentDescription = "Back Icon",
-                tint = MaterialTheme.colorScheme.onSurface
-            )
-
         }
         LazyRow(
             content = {
@@ -112,26 +98,14 @@ fun ProductPhotoSection(
                 .padding(bottom = 8.dp),
             horizontalArrangement = Arrangement.Center
         )
-        IconButton(
-            onClick = {  },
-            modifier = Modifier.align(
-                Alignment.TopEnd
-            ),
-        ) {
-            Card(
-                shape = CircleShape,
-                colors = CardDefaults.cardColors(
-                    containerColor = MaterialTheme.colorScheme.surface
-                ),
+        ProductDetailTopSection(
+            product = product,
+            navigateBack = navigateBack,
+            onFavClicked = onFavClicked,
+            onCartNavigation = { /*TODO*/ },
+            currentUserId = currentUserId,
+            modifier = Modifier.align(Alignment.TopCenter)
+        )
 
-            ) {
-                Icon(
-                    imageVector = Icons.Default.FavoriteBorder,
-                    contentDescription = "Back Icon",
-                    tint = MaterialTheme.colorScheme.onSurface,
-                    modifier = Modifier.padding(6.dp)
-                )
-            }
-        }
     }
 }

@@ -5,6 +5,7 @@ import com.closet.xavier.data.firebase.model.base.Resource
 import com.closet.xavier.data.firebase.model.product.Product
 import com.closet.xavier.data.firebase.repository.product.ProductRepository
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
@@ -12,18 +13,7 @@ class GetProductByIdUseCase @Inject constructor(private val repository: ProductR
     companion object {
         private const val TAG = "GetProductById"
     }
-    operator fun invoke(productId: String): Flow<Resource<Product>> = flow {
-        emit(Resource.Loading())
-        try {
-            val response = repository.getProductById(productId = productId).data
-            if (response != null) {
-                Log.d(TAG, "invoke: $response")
-                emit(Resource.Success(response))
-            }
-        } catch (e: Exception) {
-            e.printStackTrace()
-            Log.e(TAG, "invoke: ${e.localizedMessage}", e)
-            emit(Resource.Error(errorResponse = e.localizedMessage))
-        }
-    }
+
+    operator fun invoke(productId: String): Flow<Resource<Product?>> =
+        repository.getProductById(productId = productId)
 }

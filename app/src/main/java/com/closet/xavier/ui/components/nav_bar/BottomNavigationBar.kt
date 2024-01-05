@@ -15,9 +15,13 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.navigation.NavController
 import androidx.navigation.NavGraph.Companion.findStartDestination
+import androidx.navigation.compose.currentBackStackEntryAsState
+import com.closet.xavier.ui.components.text.BaseText
 import com.closet.xavier.ui.navigation.models.BottomNavItem
+import com.closet.xavier.ui.presentation.theme.MyClosetTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -31,54 +35,17 @@ fun BottomNavigationBar(navController: NavController) {
     var selectedItemIndex by rememberSaveable {
         mutableIntStateOf(0)
     }
-//    NavigationBar(
-//        containerColor = MaterialTheme.colorScheme.surface,
-//        contentColor = MaterialTheme.colorScheme.surface
-//    ) {
-//
-//
-//        navItems.forEachIndexed { index, navigationItem ->
-//            NavigationBarItem(
-//                selected = selectedItemIndex == index,
-//                onClick = {
-//                    selectedItemIndex = index
-//                    navController.navigate(navigationItem.route) {
-//                        popUpTo(navController.graph.findStartDestination().id) {
-//                            saveState = true
-//                        }
-//                        launchSingleTop = true
-//                        restoreState = true
-//                    }
-//
-//                },
-//                icon = {
-//
-//                    Icon(
-//                        painter = painterResource(id = navigationItem.icon),
-//                        contentDescription = navigationItem.name
-//                    )
-//                },
-//                label = {
-//                    BaseText(text = navigationItem.name)
-//                },
-//                colors = NavigationBarItemDefaults.colors(
-//                    indicatorColor = MaterialTheme.colorScheme.surface,
-//                    selectedIconColor = MaterialTheme.colorScheme.primary,
-//                    selectedTextColor = MaterialTheme.colorScheme.primary,
-//                    unselectedIconColor = MaterialTheme.colorScheme.onPrimary,
-//                    unselectedTextColor = MaterialTheme.colorScheme.onPrimary
-//                )
-//
-//            )
-//
-//        }
-//
-//    }
+
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+    val currentRoute = navBackStackEntry?.destination?.route
+
 
     NavigationBar {
         navItems.forEachIndexed { index, item ->
+            val color =
+                if (currentRoute == item.route) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onPrimary
             NavigationBarItem(
-                selected = selectedItemIndex == index,
+                selected = currentRoute == item.route,
                 onClick = {
                     selectedItemIndex = index
                     navController.navigate(item.route) {
@@ -90,7 +57,7 @@ fun BottomNavigationBar(navController: NavController) {
                     }
                 },
                 label = {
-                    Text(text = item.name)
+                    BaseText(text = item.name, fontWeight = FontWeight.Bold, color = color)
                 },
                 icon = {
                     BadgedBox(
